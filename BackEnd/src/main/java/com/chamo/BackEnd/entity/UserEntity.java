@@ -1,8 +1,6 @@
 package com.chamo.BackEnd.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -12,6 +10,8 @@ import java.util.Date;
 
 @Document(collection ="user")
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserEntity {
@@ -27,11 +27,20 @@ private String email;
 @Indexed(unique = true)
 private String username;
 private String password;
-private String mobile;
 
 @CreatedDate
 private Date createdAt;
 private String verificationCode;
 private Boolean status;
+
+public UserEntity(String name, String email, String username, String password) {
+    this.name = name;
+    this.email = email;
+    this.username = username;
+    this.password = password;
+    this.createdAt = new Date();
+    this.verificationCode = "";
+    this.status = false;
+}
 
 }
