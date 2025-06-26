@@ -127,7 +127,7 @@ const Navbar = () => {
                 <MenubarTrigger>Contact Admin</MenubarTrigger>
               </MenubarMenu>
               <MenubarMenu>
-                <MenubarTrigger><Link to="/SignIn">Sign In</Link></MenubarTrigger>
+                <MenubarTrigger><Link to="/signIn">Sign In</Link></MenubarTrigger>
               </MenubarMenu>
             </div>
           </div>
@@ -152,7 +152,7 @@ const Navbar = () => {
             <DropdownMenuItem>Message</DropdownMenuItem>
             <DropdownMenuItem>Contact Admin</DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/SignIn">Sign In</Link>
+              <Link to="/signIn">Sign In</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
