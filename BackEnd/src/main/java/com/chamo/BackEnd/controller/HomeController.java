@@ -2,7 +2,7 @@ package com.chamo.BackEnd.controller;
 
 import com.chamo.BackEnd.services.JWTService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,7 +14,9 @@ public class HomeController {
     }
 
     @GetMapping("/username")
-    public String getUsername(@RequestParam String token){
+    public String getUsername(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
         return jwtService.getUserName(token);
     }
+
 }
