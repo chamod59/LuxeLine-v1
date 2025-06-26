@@ -1,9 +1,54 @@
 import { useState } from "react";
+import api from "@/context/appContext";
 import signInImg from "@/assets/signIn-img/index1.png";
 import signUpImg from "@/assets/signIn-img/index2.png";
+import { useNavigate } from "react-router-dom";
 
 const auth = () => {
+  const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(true);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    username: "",
+    password: "",
+  });
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await api.post("/api/v1/auth/login", {
+        username: userName,
+        password,
+      });
+
+      const token = res.data.token;
+      localStorage.setItem("token", token); // store JWT
+      setError("");
+      alert("Login successful!");
+      navigate("/");
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Login failed");
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    console.log(form);
+    e.preventDefault();
+    try {
+      console.log(form);
+      await api.post("/api/v1/auth/register", {
+        ...form,
+      });
+      alert("Registration successful!");
+      setIsSignIn(true);
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Sign Up failed");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200 font-sans">
@@ -15,20 +60,24 @@ const auth = () => {
               <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
                 Sign in
               </h2>
-              <form className="space-y-4">
+              <form onSubmit={handleSignIn} className="space-y-4">
                 <div>
                   <input
-                    type="email"
-                    placeholder="Enter your Email"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    type="userName"
+                    placeholder="Enter your UserName"
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
                   />
                   <label className="block text-sm text-gray-700 mt-1">
-                    Email
+                    User Name
                   </label>
                 </div>
 
                 <div>
                   <input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     type="password"
                     placeholder="Enter Password"
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -37,6 +86,7 @@ const auth = () => {
                     Password
                   </label>
                 </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
 
                 <div className="flex justify-between items-center text-sm">
                   <label className="flex items-center gap-2">
@@ -78,9 +128,16 @@ const auth = () => {
               <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
                 Sign up now
               </h2>
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form
+                onSubmit={handleSignUp}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
                 <div className="col-span-2">
                   <input
+                    value={form.name}
+                    onChange={(e) =>
+                      setForm({ ...form, name: e.target.value })
+                    }
                     type="fullName"
                     placeholder="Enter your Name"
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -92,6 +149,10 @@ const auth = () => {
 
                 <div className="col-span-2">
                   <input
+                    value={form.email}
+                    onChange={(e) =>
+                      setForm({ ...form, email: e.target.value })
+                    }
                     type="email"
                     placeholder="Enter your Email"
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -103,6 +164,10 @@ const auth = () => {
 
                 <div className="col-span-2">
                   <input
+                    value={form.username}
+                    onChange={(e) =>
+                      setForm({ ...form, username: e.target.value })
+                    }
                     type="username"
                     placeholder="Enter your Username"
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -114,6 +179,10 @@ const auth = () => {
 
                 <div className="col-span-2">
                   <input
+                    value={form.password}
+                    onChange={(e) =>
+                      setForm({ ...form, password: e.target.value })
+                    }
                     type="password"
                     placeholder="Enter your Password"
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -122,6 +191,7 @@ const auth = () => {
                     Password
                   </label>
                 </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
 
                 <div className="col-span-2 mt-2">
                   <button
