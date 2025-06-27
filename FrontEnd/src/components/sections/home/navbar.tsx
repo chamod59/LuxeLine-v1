@@ -57,7 +57,7 @@ const Navbar = () => {
         <div className="flex-none md:mr-auto">
           <MenubarMenu>
             <MenubarTrigger className="font-bold text-2xl">
-              LUXE LINE
+              <Link to="/">LUXE LINE</Link>
             </MenubarTrigger>
           </MenubarMenu>
         </div>
