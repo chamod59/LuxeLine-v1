@@ -26,27 +26,29 @@ const auth = () => {
       });
 
       const token = res.data.token;
-      localStorage.setItem("token", token); // store JWT
+      localStorage.setItem("token", token); 
       setError("");
-      alert("Login successful!");
-      navigate("/");
+      navigate("/"); 
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Login failed");
+      const backendError =
+        err?.response?.data?.error || err?.response?.data?.message;
+      setError(backendError || "Login failed");
     }
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
-    console.log(form);
     e.preventDefault();
     try {
-      console.log(form);
       await api.post("/api/v1/auth/register", {
         ...form,
       });
-      alert("Registration successful!");
+
       setIsSignIn(true);
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Sign Up failed");
+      const backendError =
+        err?.response?.data?.error || err?.response?.data?.message;
+
+      setError(backendError || "Sign Up failed");
     }
   };
 
@@ -86,7 +88,11 @@ const auth = () => {
                     Password
                   </label>
                 </div>
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {error && (
+                  <p className="text-red-500 text-sm mt-2 text-center">
+                    {error}
+                  </p>
+                )}
 
                 <div className="flex justify-between items-center text-sm">
                   <label className="flex items-center gap-2">
@@ -135,9 +141,7 @@ const auth = () => {
                 <div className="col-span-2">
                   <input
                     value={form.name}
-                    onChange={(e) =>
-                      setForm({ ...form, name: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
                     type="fullName"
                     placeholder="Enter your Name"
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -191,7 +195,11 @@ const auth = () => {
                     Password
                   </label>
                 </div>
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {error && (
+                  <p className="text-red-500 text-sm mt-2 text-center">
+                    {error}
+                  </p>
+                )}
 
                 <div className="col-span-2 mt-2">
                   <button
