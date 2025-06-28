@@ -4,9 +4,11 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 @Document(collection ="user")
 @Data
@@ -32,6 +34,9 @@ private String password;
 private Date createdAt;
 private String verificationCode;
 private Boolean status;
+
+@DBRef
+private List<ProductEntity> products;
 
 public UserEntity(String name, String email, String username, String password) {
     this.name = name;

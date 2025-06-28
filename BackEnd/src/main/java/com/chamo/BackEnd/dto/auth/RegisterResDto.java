@@ -1,4 +1,4 @@
-package com.chamo.BackEnd.dto;
+package com.chamo.BackEnd.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
