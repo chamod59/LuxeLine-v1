@@ -1,9 +1,9 @@
 package com.chamo.BackEnd.controller;
 
-import com.chamo.BackEnd.dto.LoginReqDto;
-import com.chamo.BackEnd.dto.LoginResDto;
-import com.chamo.BackEnd.dto.RegisterReqDto;
-import com.chamo.BackEnd.dto.RegisterResDto;
+import com.chamo.BackEnd.dto.auth.LoginReqDto;
+import com.chamo.BackEnd.dto.auth.LoginResDto;
+import com.chamo.BackEnd.dto.auth.RegisterReqDto;
+import com.chamo.BackEnd.dto.auth.RegisterResDto;
 import com.chamo.BackEnd.entity.UserEntity;
 import com.chamo.BackEnd.services.AuthService;
 import org.springframework.http.HttpStatus;
