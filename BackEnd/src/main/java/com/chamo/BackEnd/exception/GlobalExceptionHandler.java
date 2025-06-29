@@ -62,6 +62,17 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResDto> handleProductNotFound(ProductNotFoundException ex, WebRequest request) {
+        ErrorResDto errorResponse = new ErrorResDto(
+                HttpStatus.NOT_FOUND.value(),
+                "PRODUCT_NOT_FOUND",
+                ex.getMessage(),
+                getCleanPath(request)
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
     // Helper methods
     private boolean isAuthEndpoint(WebRequest request) {
         return request.getDescription(false).contains("/api/auth/");

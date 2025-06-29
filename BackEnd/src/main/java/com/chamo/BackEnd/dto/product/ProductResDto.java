@@ -10,4 +10,5 @@ import lombok.*;
 public class ProductResDto {
     private String message;
     private String error;
+
 }

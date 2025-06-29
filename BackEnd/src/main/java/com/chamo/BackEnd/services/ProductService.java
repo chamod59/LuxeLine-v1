@@ -31,6 +31,10 @@ public class ProductService {
         return productRepository.save(newProduct);
     }
 
+    public Optional<ProductEntity> findById(String id) {
+        return productRepository.findById(id);
+    }
+
 
     public ProductResDto addProduct(ProductReqDto productData) {
         try {
