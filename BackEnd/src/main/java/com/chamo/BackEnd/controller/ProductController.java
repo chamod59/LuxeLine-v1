@@ -2,17 +2,16 @@ package com.chamo.BackEnd.controller;
 
 import com.chamo.BackEnd.dto.product.ProductReqDto;
 import com.chamo.BackEnd.dto.product.ProductResDto;
+import com.chamo.BackEnd.entity.ProductEntity;
 import com.chamo.BackEnd.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,13 +24,22 @@ public class ProductController {
         this.productService = productService;
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<ProductResDto> createProduct(@RequestBody ProductReqDto productData){
-//        ProductResDto res = productService.addProduct(productData);
-//        if(res.getError()!=null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(res);
-//    }
+    @GetMapping
+    public List<ProductEntity> getAllProducts() {
+        return productService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable String id) {
+        Optional<ProductEntity> productOpt = productService.findById(id);
+
+        if (productOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ProductResDto(null, "Product not found with ID: " + id));
+        }
+
+        return ResponseEntity.ok(productOpt.get());
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ProductResDto> createProduct(@Valid @RequestBody ProductReqDto productData, BindingResult bindingResult) {
@@ -48,4 +56,5 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
+
 }
