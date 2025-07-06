@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(r -> r
-                        .requestMatchers(HttpMethod.GET, "/api/v1/product").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/product", "/api/v1/product/**").permitAll()
                         .requestMatchers("/api/v1/auth/login",
                                 "/api/v1/auth/register",
                                 "/api/v1/auth/logout",
@@ -53,6 +53,7 @@ public class SecurityConfig {
                                 "/api/v1/product/create").permitAll()
                         .anyRequest().authenticated()
                 )
+
 
                 .sessionManagement(s->s.
                         sessionCreationPolicy(SessionCreationPolicy.STATELESS))
