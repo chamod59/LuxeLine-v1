@@ -27,6 +27,7 @@ public class ProductEntity {
 
     private String details;
     private int qty;
+    private String img;
     private Boolean status;
 
     @CreatedDate
@@ -35,10 +36,11 @@ public class ProductEntity {
     @DBRef
     private UserEntity user;
 
-    public ProductEntity(int qty, String details, String title, Double price) {
+    public ProductEntity(int qty, String img, String details, String title, Double price) {
         this.createdAt = new Date();
         this.status = false;
         this.qty = qty;
+        this.img = img;
         this.details = details;
         this.title = title;
         this.price = price;
