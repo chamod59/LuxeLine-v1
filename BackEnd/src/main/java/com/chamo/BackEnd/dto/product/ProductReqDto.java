@@ -27,5 +27,7 @@ public class ProductReqDto {
     @Min(value = 0, message = "Quantity cannot be negative")
     private int qty;
 
+    private String img;
+
     private Boolean status;
 }

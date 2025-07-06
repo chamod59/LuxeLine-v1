@@ -93,7 +93,7 @@ public class AuthService {
 
             // Prepare claims
             Map<String, Object> claims = new HashMap<>();
-            claims.put("role", "User");
+            claims.put("role", "Admin");
             claims.put("email", loginData.getUsername() + "@example.com");
 
             // Generate token

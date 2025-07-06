@@ -25,6 +25,7 @@ public class ProductService {
     public ProductEntity createProduct(ProductReqDto productData){
         ProductEntity newProduct = new ProductEntity(
                 productData.getQty(),
+                productData.getImg(),
                 productData.getDetails(),
                 productData.getTitle(),
                 productData.getPrice());
@@ -53,6 +54,10 @@ public class ProductService {
 
             if (productData.getQty() < 0) {
                 return new ProductResDto(null, "Product quantity cannot be negative");
+            }
+
+            if(productData.getImg() == null || productData.getImg().trim().isEmpty()) {
+                return new ProductResDto(null, "Product image is required");
             }
 
             Optional<ProductEntity> existingProduct = productRepository.findByTitle(productData.getTitle());

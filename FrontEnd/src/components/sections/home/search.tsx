@@ -10,9 +10,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import api from "@/context/appContext";
+import AddProductCard from "../products/addProductCard";
+import { useAuth } from "@/context/authContext";
 
 const Search = () => {
   const [username, setUsername] = useState("");
+  const { isLoggedIn } = useAuth();
+  const [showAddProductForm, setShowAddProductForm] = useState(false);
+
+  const openAddProductForm = () => {
+    if (!isLoggedIn) {
+      alert("You have to log into application first");
+      return;
+    }
+    setShowAddProductForm(true);
+  };
+  const closeAddProductForm = () => setShowAddProductForm(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -87,15 +100,34 @@ const Search = () => {
         </Button>
       </div>
 
-      {/* Hidden on small screens, visible on medium and large screens */}
       <div className="hidden md:flex md:basis-1/4 md:justify-end space-x-2">
         <Button type="submit" className="rounded-full px-6" variant="outline">
           Search
         </Button>
-        <Button type="submit" variant="link">
-          Advanced
+        <Button
+          type="button"
+          className="rounded-full px-6"
+          variant="outline"
+          onClick={openAddProductForm}
+        >
+          Add Product
         </Button>
       </div>
+
+      {showAddProductForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-start p-4 z-50 overflow-auto">
+          <div className="bg-white rounded-md shadow-md max-w-xl w-full relative">
+            <button
+              onClick={closeAddProductForm}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl font-bold"
+              aria-label="Close Add Product Form"
+            >
+              &times;
+            </button>
+            <AddProductCard />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
