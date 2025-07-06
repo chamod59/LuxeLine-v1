@@ -6,8 +6,13 @@ import com.chamo.BackEnd.dto.auth.RegisterReqDto;
 import com.chamo.BackEnd.dto.auth.RegisterResDto;
 import com.chamo.BackEnd.entity.UserEntity;
 import com.chamo.BackEnd.services.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,4 +52,30 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
+
+    @GetMapping("/validate-token")
+    public ResponseEntity<String> validateToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return ResponseEntity.ok("Token is valid for user: " + authentication.getName());
+        }
+
+        return ResponseEntity.status(401).body("Token validation failed.");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response){
+        ResponseCookie cookie = ResponseCookie.from("jwt","")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body("Logged out Successfully");
+    }
+
 }

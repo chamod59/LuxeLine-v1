@@ -13,11 +13,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/authContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
+  const { isLoggedIn, setIsLoggedIn, checkAuthStatus } = useAuth();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -46,6 +48,19 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, isSearchOpen]);
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const handleSignOut = async () => {
+    await fetch("http://localhost:8080/api/v1/auth/logout", {
+      method: "POST",
+    });
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    window.location.href = "/signIn";
+  };
 
   return (
     <Menubar
@@ -127,7 +142,15 @@ const Navbar = () => {
                 <MenubarTrigger>Contact Admin</MenubarTrigger>
               </MenubarMenu>
               <MenubarMenu>
-                <MenubarTrigger><Link to="/signIn">Sign In</Link></MenubarTrigger>
+                <MenubarTrigger>
+                  {isLoggedIn ? (
+                    <span onClick={handleSignOut} style={{ cursor: "pointer" }}>
+                      Sign Out
+                    </span>
+                  ) : (
+                    <Link to="/signIn">Sign In</Link>
+                  )}
+                </MenubarTrigger>
               </MenubarMenu>
             </div>
           </div>
@@ -152,7 +175,11 @@ const Navbar = () => {
             <DropdownMenuItem>Message</DropdownMenuItem>
             <DropdownMenuItem>Contact Admin</DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/signIn">Sign In</Link>
+              {isLoggedIn ? (
+                <button onClick={handleSignOut}>Sign Out</button>
+              ) : (
+                <Link to="/signIn">Sign In</Link>
+              )}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

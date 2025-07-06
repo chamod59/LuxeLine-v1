@@ -37,23 +37,53 @@ public class SecurityConfig {
     }
 
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity.cors(Customizer.withDefaults())
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .sessionManagement(s->s.
+//                        sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(r-> r
+//                                .requestMatchers("/api/v1/auth/login",
+//                                        "/api/v1/auth/register",
+//                                        "/api/v1/auth/logout",
+//                                        "/username",
+//                                        "/api/v1/product/create").permitAll()
+//                                .anyRequest().authenticated()
+//                )
+//
+//                .addFilterBefore(jWTFilter, UsernamePasswordAuthenticationFilter.class)
+//                .authenticationProvider(authenticationProvider())
+//                .build();
+//    }
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(r -> r
+                        .requestMatchers("/api/v1/auth/login",
+                                "/api/v1/auth/register",
+                                "/api/v1/auth/logout",
+                                "/api/v1/auth/validate-token",
+                                "/username",
+                                "/api/v1/product/create").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(s->s.
                         sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(r-> r
-                                .requestMatchers("/api/v1/auth/login",
-                                        "/api/v1/auth/register",
-                                        "/username",
-                                        "/api/v1/product/create").permitAll()
-                                .anyRequest().authenticated()
-                )
                 .addFilterBefore(jWTFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider())
-                .build();
+                .logout(logout -> logout
+                                .logoutUrl("/api/v1/auth/logout")
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID", "jwt")
+                );
+
+        return http.build();
     }
+
 
     @Bean
     public CorsFilter corsFilter(){
