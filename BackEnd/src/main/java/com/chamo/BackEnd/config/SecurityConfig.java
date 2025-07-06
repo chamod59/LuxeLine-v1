@@ -37,26 +37,6 @@ public class SecurityConfig {
     }
 
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        return httpSecurity.cors(Customizer.withDefaults())
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .sessionManagement(s->s.
-//                        sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(r-> r
-//                                .requestMatchers("/api/v1/auth/login",
-//                                        "/api/v1/auth/register",
-//                                        "/api/v1/auth/logout",
-//                                        "/username",
-//                                        "/api/v1/product/create").permitAll()
-//                                .anyRequest().authenticated()
-//                )
-//
-//                .addFilterBefore(jWTFilter, UsernamePasswordAuthenticationFilter.class)
-//                .authenticationProvider(authenticationProvider())
-//                .build();
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
