@@ -3,7 +3,7 @@ import SearchSection from "@/components/sections/home/search";
 import Carousel from "@/components/sections/home/EmblaCarousel";
 import Cards from "@/components/sections/home/cards";
 import TestImonials from "@/components/sections/home/testImonials";
-import Products from "@/components/sections/home/products";
+import Products from "@/components/sections/home/productList";
 import Details from "@/components/sections/home/details";
 import Footer from "@/components/sections/home/footer";
 

@@ -63,7 +63,7 @@ export default function AddProductCard() {
         title,
         details,
         price: parseFloat(price),
-        quantity: parseInt(quantity, 10),
+        qty: parseInt(quantity, 10),
         img: imageUrl,
       };
 
