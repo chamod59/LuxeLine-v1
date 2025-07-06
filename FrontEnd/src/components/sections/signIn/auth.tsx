@@ -3,6 +3,7 @@ import api from "@/context/appContext";
 import signInImg from "@/assets/signIn-img/index1.png";
 import signUpImg from "@/assets/signIn-img/index2.png";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/authContext";
 
 const auth = () => {
   const navigate = useNavigate();
@@ -16,25 +17,30 @@ const auth = () => {
     username: "",
     password: "",
   });
+  const { checkAuthStatus } = useAuth();
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await api.post("/api/v1/auth/login", {
-        username: userName,
-        password,
-      });
+const handleSignIn = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await api.post("/api/v1/auth/login", {
+      username: userName,
+      password,
+    });
 
-      const token = res.data.token;
-      localStorage.setItem("token", token); 
-      setError("");
-      navigate("/"); 
-    } catch (err: any) {
-      const backendError =
-        err?.response?.data?.error || err?.response?.data?.message;
-      setError(backendError || "Login failed");
-    }
-  };
+    const token = res.data.token;
+    localStorage.setItem("token", token);
+
+    await checkAuthStatus(); // ✅ Important: Update context after login
+
+    setError("");
+    navigate("/");
+  } catch (err: any) {
+    const backendError =
+      err?.response?.data?.error || err?.response?.data?.message;
+    setError(backendError || "Login failed");
+  }
+};
+
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
